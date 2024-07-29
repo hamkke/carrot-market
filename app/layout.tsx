@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
-import { Orbit } from 'next/font/google';
+import { Gowun_Batang } from 'next/font/google';
 import './globals.css';
 
-const orbit = Orbit({ subsets: ['latin'], weight: '400' });
+const gowunBatang = Gowun_Batang({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko-KR'>
-      <body className={orbit.className}>{children}</body>
+      <body className={gowunBatang.className}>{children}</body>
     </html>
   );
 }
