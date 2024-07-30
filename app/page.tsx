@@ -9,7 +9,7 @@ export default function Home() {
         />
         <button
           type='button'
-          className='py-2 text-white transition-colors bg-black rounded-full outline-none active:text-rose-500 focus:text-rose-500 md:ml-2 md:px-4'
+          className='py-2 text-white transition-colors rounded-full outline-none bg-gradient-to-br from-sky-400 via-rose-50 to-green-400 active:text-rose-500 focus:text-rose-500 md:ml-2 md:px-4'
         >
           SEARCH
         </button>
