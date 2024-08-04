@@ -1,22 +1,22 @@
 export default function Home() {
   return (
-    <main className='flex items-center justify-center w-screen h-screen p-5 bg-blue-900 dark:bg-slate-700 sm:bg-blue-700 md:bg-blue-500 lg:bg-blue-100 '>
-      <div className='flex flex-col w-full max-w-screen-sm p-5 bg-white shadow-2xl md:flex-row rounded-2xl dark:bg-slate-500 *:outline-none has-[:invalid]:bg-red-300'>
-        <input
-          type='text'
-          required
-          placeholder='keyword'
-          className='w-full h-10 px-4 mb-4 transition-shadow rounded-full md:m-0 bg-slate-100 ring ring-transparent focus:ring-rose-500 focus:ring-2 placeholder:text-rose-600 invalid:bg-blue-400 invalid:focus:ring-black peer'
-        />
-        <span className='hidden text-red-500 peer-invalid:block'>
-          빈칸 ㄴㄴ
-        </span>
-        <button
-          type='button'
-          className='py-2 text-white transition-colors bg-black rounded-full active:text-rose-500 focus:text-rose-500 md:ml-2 md:px-4 peer-invalid:bg-red-500 peer-required:bg-green-500'
-        >
-          SEARCH
-        </button>
+    <main className='bg-gray-100 sm:bg-red-100 md:bg-green-100 lg:bg-cyan-100 xl:bg-orange-100 2xl:bg-purple-100 h-screen flex items-center justify-center p-5'>
+      <div className='bg-white shadow-lg p-5 rounded-3xl w-full max-w-screen-sm flex flex-col gap-4'>
+        {['Nico', 'Me', 'You', 'Yourself', ''].map((person, index) => (
+          <div
+            key={index}
+            className='flex items-center gap-5 even:text-rose-900 odd:text-blue-600 first:bg-slate-100 last:border-2 first:hover:bg-lime-200'
+          >
+            <div className='size-10 bg-blue-400 rounded-full' />
+            <span className='text-lg font-medium empty:w-24 empty:h-5 empty:rounded-full empty:animate-pulse empty:bg-blue-300'>
+              {person}
+            </span>
+            <div className='size-6 bg-red-500 text-white flex items-center justify-center rounded-full relative'>
+              <span className='z-10'>{index}</span>
+              <div className='size-6 bg-violet-300 rounded-full absolute animate-ping ' />
+            </div>
+          </div>
+        ))}
       </div>
     </main>
   );
