@@ -2,32 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.testApply {
-  @apply size-6 bg-violet-300  absolute rounded-sexy-name;
-}
-.testApplyPlus {
-  @apply animate-ping;
-}
 @layer base {
   a {
-    @apply text-blue-500;
-  }
-}
-
-@layer utilities {
-  .text-bigger-hello {
-    @apply text-3xl font-semibold;
-  }
-}
-
-@layer components {
-  .animatePing {
-    @apply bg-red-500 text-white flex items-center justify-center rounded-full relative;
-  }
-  .size10 {
-    @apply size-10;
-  }
-  .size6 {
-    @apply size-6;
+    @apply text-pink-400;
   }
 }

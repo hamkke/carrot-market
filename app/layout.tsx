@@ -19,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko-KR'>
-      <body className={gowunBatang.className}>{children}</body>
+      <body
+        className={`${gowunBatang.className} bg-neutral-900 text-white max-w-screen-sm mx-auto`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
