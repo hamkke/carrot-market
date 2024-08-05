@@ -7,3 +7,9 @@
     @apply text-pink-400;
   }
 }
+
+@layer components {
+  .primary-btn {
+    @apply w-full bg-green-500 text-white  font-medium  text-center hover:bg-green-400 transition-colors;
+  }
+}
