@@ -1,7 +1,6 @@
 import FormBtn from '@/components/form-btn';
 import FormInput from '@/components/form-input';
-import { ChatBubbleOvalLeftIcon } from '@heroicons/react/24/solid';
-import Link from 'next/link';
+import SocialLogin from '@/components/social-login';
 
 export default function CreateAccount() {
   return (
@@ -25,21 +24,9 @@ export default function CreateAccount() {
           required
           errors={[]}
         />
-        {/* <button className='primary-btn py-2'>Create account</button> */}
         <FormBtn text='Create account' loading={false} />
       </form>
-      <div className='w-full h-px bg-green-500' />
-      <div>
-        <Link
-          className='primary-btn flex py-2 items-center justify-center gap-2'
-          href='/sms'
-        >
-          <span>
-            <ChatBubbleOvalLeftIcon className='h-6 w-6' />
-          </span>
-          <span>Sign up with SMS</span>
-        </Link>
-      </div>
+      <SocialLogin />
     </div>
   );
 }
