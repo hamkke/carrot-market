@@ -1,6 +1,5 @@
 import FormBtn from '@/components/form-btn';
 import FormInput from '@/components/form-input';
-import SocialLogin from '@/components/social-login';
 
 export default function SMSLogin() {
   return (
@@ -11,12 +10,14 @@ export default function SMSLogin() {
       </div>
       <form className='flex flex-col gap-4'>
         <FormInput
+          name='phoneNumber'
           type='number'
           placeholder='Phone number'
           required
           errors={[]}
         />
         <FormInput
+          name='number'
           type='number'
           placeholder='Verification code'
           required

@@ -3,9 +3,16 @@ interface IFormInput {
   placeholder: string;
   required: boolean;
   errors: string[];
+  name: string;
 }
 
-const FormInput = ({ type, placeholder, required, errors }: IFormInput) => {
+const FormInput = ({
+  type,
+  placeholder,
+  required,
+  errors,
+  name,
+}: IFormInput) => {
   return (
     <div className='flex flex-col gap-2'>
       <input
@@ -13,6 +20,7 @@ const FormInput = ({ type, placeholder, required, errors }: IFormInput) => {
         type={type}
         placeholder={placeholder}
         required={required}
+        name={name}
       />
       {errors.map((item, idx) => {
         return (
