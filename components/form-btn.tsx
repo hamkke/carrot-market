@@ -1,15 +1,19 @@
+'use client';
+import { useFormStatus } from 'react-dom';
+
 interface IFormBtn {
   text: string;
-  loading: boolean;
 }
 
-const FormBtn = ({ text, loading }: IFormBtn) => {
+const FormBtn = ({ text }: IFormBtn) => {
+  const { pending, action, data, method } = useFormStatus();
+  console.log(pending, data, action, method);
   return (
     <button
-      disabled={loading}
+      disabled={pending}
       className='primary-btn py-2 disabled:cursor-not-allowed disabled:bg-neutral-600 disabled:text-pink-400'
     >
-      {loading ? 'LOADING' : text}
+      {pending ? 'LOADING' : text}
     </button>
   );
 };

@@ -6,8 +6,10 @@ export default function Login() {
   const handleForm = async (formData: FormData) => {
     // 이 함수가 서버에서만 돌아가게 하는 지시어, 항상 최상단에 위치해야 함
     'use server';
-    console.log(formData.get('email'), formData.get('password'));
+    // console.log(formData.get('email'), formData.get('password'));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   };
+
   return (
     <div className='flex flex-col gap-10 py-8 px-6'>
       <div className='flex flex-col gap-2 *:font-medium'>
@@ -29,7 +31,7 @@ export default function Login() {
           required
           errors={[]}
         />
-        <FormBtn text='Create account' loading={false} />
+        <FormBtn text='Create account' />
       </form>
       <SocialLogin />
     </div>
