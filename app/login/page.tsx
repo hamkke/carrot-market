@@ -1,8 +1,18 @@
+'use client';
 import FormBtn from '@/components/form-btn';
 import FormInput from '@/components/form-input';
 import SocialLogin from '@/components/social-login';
 
 export default function Login() {
+  const testRouterHandler = async () => {
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: 'walwalzz',
+      }),
+    });
+    console.log(await response.json());
+  };
   return (
     <div className='flex flex-col gap-10 py-8 px-6'>
       <div className='flex flex-col gap-2 *:font-medium'>
@@ -17,8 +27,10 @@ export default function Login() {
           required
           errors={[]}
         />
-        <FormBtn text='Create account' loading={false} />
       </form>
+      <span onClick={testRouterHandler}>
+        <FormBtn text='Create account' loading={false} />
+      </span>
       <SocialLogin />
     </div>
   );

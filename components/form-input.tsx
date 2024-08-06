@@ -9,7 +9,7 @@ const FormInput = ({ type, placeholder, required, errors }: IFormInput) => {
   return (
     <div className='flex flex-col gap-2'>
       <input
-        className='bg-transparent w-full h-10 focus:outline-none ring-2 transition-shadow  focus:ring-4 ring-white focus:ring-green-500 border-none placeholder:text-neutral-400'
+        className='bg-transparent w-full h-10 focus:outline-none ring-1 transition-shadow ring-white focus:ring-green-500 border-none placeholder:text-white'
         type={type}
         placeholder={placeholder}
         required={required}
