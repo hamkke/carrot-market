@@ -1,4 +1,5 @@
 'use client';
+
 import { useFormStatus } from 'react-dom';
 
 interface IFormBtn {
@@ -6,8 +7,7 @@ interface IFormBtn {
 }
 
 const FormBtn = ({ text }: IFormBtn) => {
-  const { pending, action, data, method } = useFormStatus();
-  console.log(pending, data, action, method);
+  const { pending } = useFormStatus();
   return (
     <button
       disabled={pending}
