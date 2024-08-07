@@ -15,21 +15,14 @@ export default function Login() {
         <h2 className='text-xl'>Log in with email and password.</h2>
       </div>
       <form className='flex flex-col gap-4' action={action}>
-        <FormInput
-          name='email'
-          type='email'
-          placeholder='Email'
-          required
-          errors={[]}
-        />
+        <FormInput name='email' type='email' placeholder='Email' required />
         <FormInput
           name='password'
           type='password'
           placeholder='Password'
           required
-          errors={state?.errors ?? []}
         />
-        <FormBtn text='Create account' />
+        <FormBtn text='로그인' />
       </form>
       <SocialLogin />
     </div>
