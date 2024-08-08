@@ -1,26 +1,21 @@
-interface IFormInput {
-  type: string;
-  placeholder: string;
-  required: boolean;
+import { InputHTMLAttributes } from 'react';
+
+interface inputProp {
   errors?: string[];
   name: string;
 }
 
-const FormInput = ({
-  type,
-  placeholder,
-  required,
+const Input = ({
   errors = [],
   name,
-}: IFormInput) => {
+  ...rest
+}: inputProp & InputHTMLAttributes<HTMLInputElement>) => {
   return (
     <div className='flex flex-col gap-2'>
       <input
         className='bg-transparent w-full h-10 focus:outline-none ring-1 transition-shadow ring-white focus:ring-green-500 border-none placeholder:text-white'
-        type={type}
-        placeholder={placeholder}
-        required={required}
         name={name}
+        {...rest}
       />
       {errors.map((item, idx) => {
         return (
@@ -32,4 +27,4 @@ const FormInput = ({
     </div>
   );
 };
-export default FormInput;
+export default Input;
