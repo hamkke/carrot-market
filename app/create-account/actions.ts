@@ -1,8 +1,13 @@
 'use server';
 
 import { z } from 'zod';
+import {
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_ERROR,
+  USERNAME_MAX_LENGTH,
+  MIN_LENGTH,
+} from '@/lib/constants';
 
-const passwordRegex = /\d/;
 const checkEmail = (email: string) => email.includes('@zod.com');
 // const checkPassword = ({
 //   password,
@@ -20,16 +25,16 @@ const formSchema = z
         invalid_type_error: '온리 문자만 가능',
         required_error: '이름을 알려주세요',
       })
-      .min(3, '너무 짧아요')
-      .max(10, '너무 길어요')
-      .trim()
-      .transform((username) => `🔥${username}`),
+      .min(MIN_LENGTH, '너무 짧아요')
+      .max(USERNAME_MAX_LENGTH, '너무 길어요')
+      .trim(),
+    // .transform((username) => `🔥${username}`),
     email: z
       .string()
       .email()
       .refine(checkEmail, '@zod.com가 포함되어야 합니다'),
-    password: z.string().min(3),
-    confirm_password: z.string().min(3),
+    password: z.string().min(MIN_LENGTH),
+    confirm_password: z.string().min(MIN_LENGTH),
   })
   // .refine(checkPassword, {
   //   message: '둘이 달라요',
@@ -46,10 +51,10 @@ const formSchema = z
         path: ['confirm_password'],
       });
     }
-    if (!passwordRegex.test(password)) {
+    if (!PASSWORD_REGEX.test(password)) {
       ctx.addIssue({
         code: 'custom',
-        message: '숫자가 들어가야 해요',
+        message: PASSWORD_REGEX_ERROR,
         path: ['password'],
       });
     }

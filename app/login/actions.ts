@@ -1,10 +1,30 @@
 'use server';
-export const handleForm = async (prevState: any, formData: FormData) => {
-  // prevState는 이 함수가 return한 값이 된다
-  // console.log(formData.get('email'), formData.get('password'));
-  console.log(prevState, 111);
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return {
-    errors: ['wrong password', 'password too short'],
+
+import { z } from 'zod';
+import {
+  MIN_LENGTH,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_ERROR,
+} from '@/lib/constants';
+
+const formSchema = z.object({
+  email: z.string().email(),
+  password: z
+    .string()
+    .min(MIN_LENGTH, '너무 짧아요')
+    .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+});
+
+export async function logIn(prevState: any, formData: FormData) {
+  const data = {
+    email: formData.get('email'),
+    password: formData.get('password'),
   };
-};
+  const result = formSchema.safeParse(data);
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return result.error.flatten();
+  } else {
+    console.log(result.data);
+  }
+}
