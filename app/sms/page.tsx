@@ -5,6 +5,14 @@ import Input from '@/components/input';
 import { useFormState } from 'react-dom';
 import { smsVerification } from './actions';
 
+/**
+1. 전화번호 받고
+인증번호 작성란은 display:none
+2. 사용자에게 인증번호 전송
+인증번호 작성란은 display:block
+3. 사용자가 인증번호 작성
+4. 로그인
+ */
 export default function SMSLogin() {
   const [state, action] = useFormState(smsVerification, null);
   return (
@@ -16,7 +24,7 @@ export default function SMSLogin() {
       <form className='flex flex-col gap-4' action={action}>
         <Input
           name='phone_number'
-          type='number'
+          type='text'
           placeholder='Phone number'
           required
         />
@@ -25,6 +33,8 @@ export default function SMSLogin() {
           type='number'
           placeholder='Verification code'
           required
+          min={100000}
+          max={999999}
         />
         <Btn text='Verify' />
       </form>
