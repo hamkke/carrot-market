@@ -1,22 +1,27 @@
 import { PrismaClient } from '@prisma/client';
 
 const db = new PrismaClient();
-
 async function test() {
-  const user = await db.user.findMany({
+  // const token = await db.sMSToken.create({
+  //   data: {
+  //     token: '123456',
+  //     user: {
+  //       connect: {
+  //         id: 1,
+  //       },
+  //     },
+  //   },
+  // });
+  // console.log(token);
+  const token = await db.sMSToken.findUnique({
     where: {
-      phone_number: {
-        contains: '01012341234',
-      },
+      id: 1,
+    },
+    include: {
+      user: true,
     },
   });
-  //   const user = await db.user.create({
-  //     data: {
-  //       username: 'wewewewe',
-  //       phone_number: '01012341234',
-  //     },
-  //   });
-  console.log(user);
+  console.log(token);
 }
 test();
 export default db;
