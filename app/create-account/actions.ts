@@ -4,6 +4,9 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt';
 import { USERNAME_MAX_LENGTH, MIN_LENGTH } from '@/lib/constants';
 import db from '@/lib/db';
+import { getIronSession } from 'iron-session';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 /**
 로그인 프로세스
@@ -134,6 +137,14 @@ export const createAccountAction = async (
     });
 
     // 5. log the user in
+    const cookie = await getIronSession(cookies(), {
+      cookieName: 'good-karrot',
+      password: process.env.COOKIE_PASSWORD!,
+    });
+    // @ts-ignore
+    cookie.id = user.id;
+    await cookie.save();
     // 6. redirect “/home”
+    redirect('/profile');
   }
 };
