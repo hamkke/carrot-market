@@ -1,13 +1,46 @@
 'use server';
 
 import { z } from 'zod';
-import {
-  PASSWORD_REGEX,
-  PASSWORD_REGEX_ERROR,
-  USERNAME_MAX_LENGTH,
-  MIN_LENGTH,
-} from '@/lib/constants';
+import { USERNAME_MAX_LENGTH, MIN_LENGTH } from '@/lib/constants';
+import db from '@/lib/db';
 
+/**
+로그인 프로세스
+1.check if username is taken
+2. check if the email is already used
+3. hash password
+4. save the user to db
+5. log the user in
+6. redirect “/home”
+ */
+
+// 1.check if username is taken
+const checkUniqueUsername = async (username: string) => {
+  const user = await db.user.findUnique({
+    where: {
+      username,
+    },
+    select: {
+      id: true,
+    },
+  });
+  // console.log(user); // 있으면 {id:1}, 없으면 null
+  // refine에서 사용되는 함수,
+  // 값이 있을 땐 사용 중인 아이디라는 걸 보여줘야 하기 때문에 false를 return
+  return !Boolean(user);
+};
+// 2. check if the email is already used
+const ceckUniqueEmail = async (email: string) => {
+  const userEmail = await db.user.findUnique({
+    where: {
+      email,
+    },
+    select: {
+      id: true,
+    },
+  });
+  return !Boolean(userEmail);
+};
 const checkEmail = (email: string) => email.includes('@zod.com');
 // const checkPassword = ({
 //   password,
@@ -27,15 +60,16 @@ const formSchema = z
       })
       .min(MIN_LENGTH, '너무 짧아요')
       .max(USERNAME_MAX_LENGTH, '너무 길어요')
-      .trim(),
+      .trim()
+      // refine(false, '함수의 return값이 false여야 메세지를 보여줌')
+      .refine(checkUniqueUsername, '사용 중인 아이디'),
     // .transform((username) => `🔥${username}`),
-    email: z
-      .string()
-      .email()
-      .refine(checkEmail, '@zod.com가 포함되어야 합니다'),
+    email: z.string().email().refine(ceckUniqueEmail, '사용 중인 이메일'),
+    // .refine(checkEmail, '@zod.com가 포함되어야 합니다'),
     password: z.string().min(MIN_LENGTH),
     confirm_password: z.string().min(MIN_LENGTH),
   })
+  // 얘는 왜 path가 있냐? z.object를 한꺼번에 검사하는 애라서 path를 알려줘야 에러메세지를 보내지
   // .refine(checkPassword, {
   //   message: '둘이 달라요',
   //   path: ['confirm_password'],
@@ -51,14 +85,15 @@ const formSchema = z
         path: ['confirm_password'],
       });
     }
-    if (!PASSWORD_REGEX.test(password)) {
-      ctx.addIssue({
-        code: 'custom',
-        message: PASSWORD_REGEX_ERROR,
-        path: ['password'],
-      });
-    }
+    // if (!PASSWORD_REGEX.test(password)) {
+    //   ctx.addIssue({
+    //     code: 'custom',
+    //     message: PASSWORD_REGEX_ERROR,
+    //     path: ['password'],
+    //   });
+    // }
   });
+
 export const createAccountAction = async (
   prevState: any,
   formData: FormData
@@ -76,12 +111,12 @@ export const createAccountAction = async (
     confirm_password: formData.get('confirm_password'),
   };
   //   formSchema.parse(data); // 얘는 에러를 던짐, 앱이 멈춤
-  //   console.log(formSchema.safeParse(data));
-  const result = formSchema.safeParse(data);
+  // console.log(formSchema.safeParse(data));
+  const result = await formSchema.safeParseAsync(data);
   if (!result.success) {
     // console.log(result.error.flatten());
     return result.error.flatten();
   } else {
-    console.log(result.data);
+    // console.log(result.data);
   }
 };
