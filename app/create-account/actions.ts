@@ -7,6 +7,7 @@ import db from '@/lib/db';
 import { getIronSession } from 'iron-session';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import getSession from '@/lib/session';
 
 /**
 로그인 프로세스
@@ -137,11 +138,7 @@ export const createAccountAction = async (
     });
 
     // 5. log the user in
-    const cookie = await getIronSession(cookies(), {
-      cookieName: 'good-karrot',
-      password: process.env.COOKIE_PASSWORD!,
-    });
-    // @ts-ignore
+    const cookie = await getSession();
     cookie.id = user.id;
     await cookie.save();
     // 6. redirect “/home”
