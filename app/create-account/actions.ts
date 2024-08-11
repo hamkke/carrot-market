@@ -1,6 +1,7 @@
 'use server';
 
 import { z } from 'zod';
+import bcrypt from 'bcrypt';
 import { USERNAME_MAX_LENGTH, MIN_LENGTH } from '@/lib/constants';
 import db from '@/lib/db';
 
@@ -117,6 +118,22 @@ export const createAccountAction = async (
     // console.log(result.error.flatten());
     return result.error.flatten();
   } else {
-    // console.log(result.data);
+    // 3. hash password
+    const hashedPassword = await bcrypt.hash(result.data.password, 12);
+    // console.log(hashedPassword); // $2b$12$m89qcc9O9NUqclZXgf5VfuoyjzKyn5flNoS6wMlhG6x7HEUbqQ2Vu
+    // 4. save the user to db
+    const user = await db.user.create({
+      data: {
+        username: result.data.username,
+        email: result.data.email,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // 5. log the user in
+    // 6. redirect “/home”
   }
 };
