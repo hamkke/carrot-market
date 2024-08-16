@@ -67,9 +67,9 @@ const formSchema = z
         code: 'custom',
         message: '사용중인 사용자명',
         path: ['username'],
-        // fatal: true,
+        fatal: true,
       });
-      // return z.NEVER;
+      return z.NEVER;
     }
   })
   // 2. check if the email is already used
