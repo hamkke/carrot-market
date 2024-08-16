@@ -11,7 +11,15 @@ import {
 import db from '@/lib/db';
 import getSession from '@/lib/session';
 
-// find a user with the email
+/**
+로그인 프로세스
+1. find a user with the email
+2. if the user is found, check password hash
+3. log the user in
+4. redirect /profile
+ */
+
+// 1. find a user with the email
 const checkEmailExists = async (email: string) => {
   const user = await db.user.findUnique({
     where: {
@@ -30,7 +38,7 @@ const formSchema = z.object({
   // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
 });
 
-export async function logIn(prevState: any, formData: FormData) {
+export async function logIn(_: any, formData: FormData) {
   const data = {
     email: formData.get('email'),
     password: formData.get('password'),
@@ -38,11 +46,12 @@ export async function logIn(prevState: any, formData: FormData) {
   const result = await formSchema.safeParseAsync(data);
   if (!result.success) {
     // console.log(result.error.flatten());
+    // { formErrors: [], fieldErrors: { email: [ '존재하지 않는 이메일' ] } }
+    // formErrors는 path를 알 수 없을 때 나오는 에러
     return result.error.flatten();
   } else {
-    // console.log(result.data);
-    // find a user with the email
-    // if the user is found, check password hash
+    // zod로 1번 검증
+    // 2. if the user is found, check password hash
     const user = await db.user.findUnique({
       where: {
         email: result.data.email,
@@ -51,13 +60,15 @@ export async function logIn(prevState: any, formData: FormData) {
     });
     const ok = await bcrypt.compare(result.data.password, user!.password ?? '');
     if (ok) {
-      // log the user in
+      // 3. log the user in
+      console.log('로그인 함?');
       const cookie = await getSession();
       cookie.id = user!.id;
       await cookie.save();
-      // redirect /profile
+      // 4. redirect /profile
       redirect('/profile');
     } else {
+      //  result.error.flatten()의 모양대로 에러 보내주기
       return {
         fieldErrors: {
           password: ['땡'],
