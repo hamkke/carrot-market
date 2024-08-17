@@ -26,7 +26,6 @@ const Profile = async () => {
 
   const handleLogout = async () => {
     'use server';
-    console.log(123);
     const session = await getSession();
     session.destroy();
     redirect('/');
@@ -36,7 +35,7 @@ const Profile = async () => {
     <div>
       {user?.username} WELCOME
       <form action={handleLogout}>
-        <button type='button'>로그아웃</button>
+        <button>로그아웃</button>
       </form>
     </div>
   );
