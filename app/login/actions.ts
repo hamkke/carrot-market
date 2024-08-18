@@ -61,7 +61,6 @@ export async function logIn(_: any, formData: FormData) {
     const ok = await bcrypt.compare(result.data.password, user!.password ?? '');
     if (ok) {
       // 3. log the user in
-      console.log('로그인 함?');
       const cookie = await getSession();
       cookie.id = user!.id;
       await cookie.save();
