@@ -1,5 +1,8 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
+// import db from '../../../lib/db';
+import db from '@/lib/db';
+import getSession from '@/lib/session';
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code');
@@ -25,12 +28,53 @@ export async function GET(request: NextRequest) {
       Accept: 'application/json',
     },
   });
-  const accessTokenJson = await accessTokenResponse.json();
+  //   const accessTokenJson = await accessTokenResponse.json();
+  const { error, access_token } = await accessTokenResponse.json();
 
-  if ('error' in accessTokenJson) {
+  if (error) {
     return new Response(null, {
       status: 400,
     });
   }
-  return NextResponse.json(accessTokenJson);
+  const userProfileResponse = await fetch('https://api.github.com/user', {
+    headers: {
+      // 이건 github가 이렇게 하래서 하는 거임
+      Authorization: `Bearer ${access_token}`,
+    },
+    // next.js에서 모든 fetch는 캐싱된다! 근데 이거는 user 정보이기에 no-cache
+    cache: 'no-cache',
+  });
+  // login은 username
+  const { id, avatar_url, login } = await userProfileResponse.json();
+  // 기존 회원
+  const user = await db.user.findUnique({
+    where: {
+      github_id: String(id),
+    },
+    select: {
+      id: true,
+    },
+  });
+  if (user) {
+    const session = await getSession();
+    session.id = user.id;
+    await session.save();
+    return redirect('/profile');
+  }
+  // 새로운 회원
+  const newUser = await db.user.create({
+    data: {
+      // FIXME: github에서 가져온 username이라 중복 확인 ㄴㄴ
+      username: login,
+      github_id: String(id),
+      avatar: avatar_url,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const session = await getSession();
+  session.id = newUser.id;
+  await session.save();
+  return redirect('/profile');
 }
