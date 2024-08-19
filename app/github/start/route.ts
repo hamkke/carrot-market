@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { redirect } from 'next/navigation';
+import { NextRequest } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const baseURL = 'https://github.com/login/oauth/authorize';
@@ -12,5 +13,5 @@ export async function GET(request: NextRequest) {
   console.log(formattedParams);
   // client_id=Ov23liCkmCeAnpP44yz7&scope=read%3Auser%2Cuser%3Aemail&allow_signup=true
   const finalUrl = `${baseURL}?${formattedParams}`;
-  return NextResponse.redirect(finalUrl);
+  return redirect(finalUrl);
 }
