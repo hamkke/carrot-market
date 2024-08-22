@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     allow_signup: 'true',
   };
   const formattedParams = new URLSearchParams(params).toString();
-  console.log(formattedParams);
+  // console.log(formattedParams);
   // client_id=Ov23liCkmCeAnpP44yz7&scope=read%3Auser%2Cuser%3Aemail&allow_signup=true
   const finalUrl = `${baseURL}?${formattedParams}`;
   return redirect(finalUrl);

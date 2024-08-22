@@ -10,7 +10,7 @@ import {
 } from '@/lib/constants';
 import db from '@/lib/db';
 import { redirect } from 'next/navigation';
-import getSession from '@/lib/session';
+import upsertSession from '@/lib/upsertSession';
 
 /**
 회원가입 프로세스
@@ -19,7 +19,7 @@ import getSession from '@/lib/session';
 3. hash password
 4. save the user to db
 5. log the user in
-6. redirect “/home”
+6. redirect “/profile"
  */
 
 const checkSamePassword = ({
@@ -52,6 +52,7 @@ const formSchema = z
   /**
   .superRefine() 메서드는 여러 조건을 추가하고 더 복잡한 유효성 검사를 수행할 때 사용됩니다. 주로 객체 스키마에 사용되며, 조건이 실패할 때마다 여러 오류를 추가할 수 있습니다. ctx(context).addIssue 메서드를 사용하여 오류를 명시적으로 추가할 수 있습니다.
    */
+
   // 1.check if username is taken
   .superRefine(async ({ username }, ctx) => {
     const user = await db.user.findUnique({
@@ -137,10 +138,8 @@ export const createAccountAction = async (
       },
     });
     // 5. log the user in
-    const cookie = await getSession();
-    cookie.id = user.id;
-    await cookie.save();
-    // 6. redirect “/home”
+    await upsertSession(user.id);
+    // 6. redirect “/profile"
     redirect('/profile');
   }
 };

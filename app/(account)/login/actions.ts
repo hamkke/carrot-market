@@ -9,7 +9,7 @@ import {
   PASSWORD_REGEX_ERROR,
 } from '@/lib/constants';
 import db from '@/lib/db';
-import getSession from '@/lib/session';
+import upsertSession from '@/lib/upsertSession';
 
 /**
 로그인 프로세스
@@ -61,9 +61,7 @@ export async function logIn(_: any, formData: FormData) {
     const ok = await bcrypt.compare(result.data.password, user!.password ?? '');
     if (ok) {
       // 3. log the user in
-      const cookie = await getSession();
-      cookie.id = user!.id;
-      await cookie.save();
+      await upsertSession(user!.id);
       // 4. redirect /profile
       redirect('/profile');
     } else {

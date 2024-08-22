@@ -1,5 +1,5 @@
 import db from '@/lib/db';
-import getSession from '@/lib/session';
+import getSession from '@/lib/getSession';
 import { notFound, redirect } from 'next/navigation';
 
 const getUser = async () => {
@@ -18,8 +18,6 @@ const getUser = async () => {
 };
 
 const Profile = async () => {
-  console.log('middleware()이후 실행되는 거겠쥬?');
-
   const user = await getUser();
 
   const handleLogout = async () => {
